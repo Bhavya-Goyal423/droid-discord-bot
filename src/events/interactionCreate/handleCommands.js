@@ -37,7 +37,7 @@ module.exports = async (client, interaction) => {
       for (const permission of commandObject.permissionsRequired) {
         if (!interaction.member.permissions.has(permission)) {
           interaction.reply({
-            content: "Not enough permissions.",
+            content: "You dont have enough permissions to run this command.",
             ephemeral: true,
           });
           return;
@@ -51,7 +51,7 @@ module.exports = async (client, interaction) => {
 
         if (!bot.permissions.has(permission)) {
           interaction.reply({
-            content: "I don't have enough permissions.",
+            content: "I don't have enough permissions to run this command.",
             ephemeral: true,
           });
           return;
