@@ -4,6 +4,7 @@ const areCommandsDifferent = require("../../utils/areCommandsDifferent");
 
 module.exports = async (client, guild) => {
   console.log("NEW GUILD JOINED");
+  console.log(guild.name);
   try {
     const localCommands = getLocalCommands();
     const applicationCommands = await getApplicationCommands(client, guild.id);

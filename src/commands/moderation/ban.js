@@ -21,7 +21,16 @@ module.exports = {
       ephermeral: true,
     });
 
-    const targetUser = await interaction.guild.members.fetch(targetUserId);
+    let targetUser = null;
+
+    try {
+      targetUser = await interaction.guild.members.fetch(targetUserId);
+    } catch (error) {
+      if (error.message === "Unknown Member") {
+        await interaction.editReply("That user doesn't exist in the server");
+        return;
+      }
+    }
 
     if (!targetUser) {
       await interaction.editReply("That user doesn't exist in the server");
