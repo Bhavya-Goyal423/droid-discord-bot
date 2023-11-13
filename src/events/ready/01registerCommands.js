@@ -1,14 +1,19 @@
-const { testServer } = require("../../../config.json");
 const areCommandsDifferent = require("../../utils/areCommandsDifferent");
 const getApplicationCommands = require("../../utils/getApplicationCommands");
 const getLocalCommands = require("../../utils/getLocalCommands");
+const GuildModel = require("../../models/GuildSchema");
 
 module.exports = async (client) => {
   try {
-    for (const server of testServer) {
-      console.log(`registering command for ${server}`);
+    const allServers = await GuildModel.find({});
+
+    for (const server of allServers) {
+      console.log(`registering command for ${server.name}`);
       const localCommands = getLocalCommands();
-      const applicationCommands = await getApplicationCommands(client, server);
+      const applicationCommands = await getApplicationCommands(
+        client,
+        server.guildId
+      );
 
       for (const localCommand of localCommands) {
         const { name, description, options } = localCommand;

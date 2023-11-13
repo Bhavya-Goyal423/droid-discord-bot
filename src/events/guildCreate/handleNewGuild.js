@@ -9,12 +9,11 @@ module.exports = async (client, guild) => {
   const { id, username, globalName, discriminator } = ownerDetails.user;
 
   try {
-    const newGuild = await GuildModel.create({
+    await GuildModel.create({
       guildId: guild.id,
       name: guild.name,
       user: { id, username, globalName, discriminator },
     });
-    console.log(newGuild);
   } catch (error) {
     console.log(error);
   }
