@@ -5,6 +5,7 @@ const {
 const Level = require("../../models/Level");
 const canvacord = require("canvacord");
 const calculateLevelXp = require("../../utils/calculateLevelXp");
+const GuildModel = require("../../models/GuildSchema");
 
 module.exports = {
   callback: async (client, interaction) => {
@@ -17,6 +18,14 @@ module.exports = {
     });
 
     const guildId = interaction.guildId;
+
+    const isChannelAvailable = await GuildModel.findOne({ guildId });
+    if (isChannelAvailable?.levelLogChannelId === null) {
+      return await interaction.editReply(
+        "No channel have been setup for log! Use /setup-level to set a channel"
+      );
+    }
+
     const userId = interaction.options.get("target-user").value;
     const targetUser = await interaction.guild.members.fetch(userId);
     const query = { userId, guildId };
@@ -27,11 +36,18 @@ module.exports = {
       await interaction.editReply(
         "The user have not send any messages into guild or it is a bot"
       );
+      return;
     }
 
     let allLevels = await Level.find({ guildId: interaction.guild.id }).select(
       "-_id userId level xp"
     );
+
+    allLevels.sort((a, b) => {
+      if (a.level === b.level) {
+        b.xp - a.xp;
+      } else return b.level - a.level;
+    });
 
     let curRank = allLevels.findIndex((obj) => obj.userId === userId) + 1;
     const rank = new canvacord.Rank()

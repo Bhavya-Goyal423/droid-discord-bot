@@ -2,6 +2,7 @@ const { Client, Message } = require("discord.js");
 const Level = require("../../models/Level");
 const calculateLevelXp = require("../../utils/calculateLevelXp");
 const cooldown = new Set();
+const GuildModel = require("../../models/GuildSchema");
 
 /**
  *
@@ -22,6 +23,19 @@ module.exports = async (client, message) => {
     cooldown.has(message.author.id)
   )
     return;
+
+  const isChannelAvailable = await GuildModel.findOne({
+    guildId: message.guildId,
+  });
+
+  if (isChannelAvailable.levelLogChannelId === null) return;
+
+  const guild = message.guild;
+
+  const targetChannel = guild.channels.cache.get(
+    isChannelAvailable.levelLogChannelId
+  );
+
   const xpToGive = getRandomXp(5, 15);
 
   const query = {
@@ -38,9 +52,11 @@ module.exports = async (client, message) => {
         level.xp = 0;
         level.level += 1;
 
-        message.channel.send(
-          `${message.member} you have advanced to **level ${level.level}**. 🥳`
-        );
+        if (targetChannel) {
+          await targetChannel.send(
+            `${message.member} you have advanced to **level ${level.level}**. 🥳`
+          );
+        }
       }
       await level.save().catch((e) => {
         console.log(e);

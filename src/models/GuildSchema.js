@@ -14,5 +14,6 @@ const guildScehma = new Schema({
     of: String,
     required: true,
   },
+  levelLogChannelId: { type: String, default: null },
 });
 module.exports = model("Guild", guildScehma);
