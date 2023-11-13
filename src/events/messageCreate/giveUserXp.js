@@ -20,7 +20,7 @@ module.exports = async (client, message) => {
   if (
     !message.inGuild() ||
     message.author.bot ||
-    cooldown.has(message.author.id)
+    cooldown.has(message.author.id + message.guild.id)
   )
     return;
 
@@ -56,15 +56,15 @@ module.exports = async (client, message) => {
           await targetChannel.send(
             `${message.member} you have advanced to **level ${level.level}**. 🥳`
           );
-        }
+        } else return;
       }
       await level.save().catch((e) => {
         console.log(e);
         return;
       });
-      cooldown.add(message.author.id);
+      cooldown.add(message.author.id + message.guild.id);
       setTimeout(() => {
-        cooldown.delete(message.author.id);
+        cooldown.delete(message.author.id + message.guild.id);
       }, 60000);
     } else {
       const newLevel = new Level({
@@ -72,10 +72,12 @@ module.exports = async (client, message) => {
         guildId: message.guild.id,
         xp: xpToGive,
       });
-      await newLevel.save().catch((e) => {
+      const result = await newLevel.save().catch((e) => {
         console.log(e);
-        return;
       });
+
+      isChannelAvailable.levels.push(result._id);
+      await isChannelAvailable.save();
     }
   } catch (error) {
     console.log(error);

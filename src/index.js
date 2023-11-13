@@ -2,6 +2,8 @@ require("dotenv").config();
 const { Client, IntentsBitField, ActivityType } = require("discord.js");
 const mongoose = require("mongoose");
 const eventHandler = require("./handlers/eventHandler");
+const updateFieldInSchema = require("./utils/updateFieldsInSchema");
+const GuildModel = require("./models/GuildSchema");
 
 const client = new Client({
   intents: [

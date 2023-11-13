@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
 const guildScehma = new Schema({
   guildId: {
@@ -15,5 +16,9 @@ const guildScehma = new Schema({
     required: true,
   },
   levelLogChannelId: { type: String, default: null },
+  levels: {
+    type: [{ type: mongoose.Schema.Types.ObjectId }],
+    default: [],
+  },
 });
 module.exports = model("Guild", guildScehma);
