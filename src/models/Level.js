@@ -17,6 +17,10 @@ const levelSchema = new Schema({
     type: Number,
     default: 0,
   },
+  channelId: {
+    type: String,
+    default: null,
+  },
 });
 
 module.exports = model("Level", levelSchema);
