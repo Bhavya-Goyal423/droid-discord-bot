@@ -1,10 +1,24 @@
 const getLocalCommands = require("../../utils/getLocalCommands");
 const getApplicationCommands = require("../../utils/getApplicationCommands");
 const areCommandsDifferent = require("../../utils/areCommandsDifferent");
+const GuildModel = require("../../models/GuildSchema");
 
 module.exports = async (client, guild) => {
-  console.log("NEW GUILD JOINED");
-  console.log(guild.name);
+  const ownerId = guild.ownerId;
+  const ownerDetails = await guild.members.fetch(ownerId);
+  const { id, username, globalName, discriminator } = ownerDetails.user;
+
+  try {
+    const newGuild = await GuildModel.create({
+      guildId: guild.id,
+      name: guild.name,
+      user: { id, username, globalName, discriminator },
+    });
+    console.log(newGuild);
+  } catch (error) {
+    console.log(error);
+  }
+
   try {
     const localCommands = getLocalCommands();
     const applicationCommands = await getApplicationCommands(client, guild.id);
