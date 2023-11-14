@@ -21,9 +21,11 @@ module.exports = {
 
     const isChannelAvailable = await GuildModel.findOne({ guildId });
     if (isChannelAvailable?.levelLogChannelId === null) {
-      return await interaction.editReply(
-        "No channel have been setup for log! Use /setup-level to set a channel"
-      );
+      return await interaction.editReply({
+        content:
+          "No channel have been setup for log! Use /setup-level to set a channel",
+        ephermeral: true,
+      });
     }
 
     const userId = interaction.options.get("target-user").value;

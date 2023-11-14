@@ -17,7 +17,7 @@ const guildScehma = new Schema({
   },
   levelLogChannelId: { type: String, default: null },
   levels: {
-    type: [{ type: mongoose.Schema.Types.ObjectId }],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Level" }],
     default: [],
   },
 });

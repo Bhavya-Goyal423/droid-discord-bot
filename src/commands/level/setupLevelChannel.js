@@ -20,17 +20,15 @@ module.exports = {
     const channelId = interaction.options.get("channel-id").value;
 
     try {
-      const updatedLogChannel = await GuildModel.findOneAndUpdate(
+      await GuildModel.findOneAndUpdate(
         { guildId: interaction.guildId },
-        { levelLogChannelId: channelId },
-        { new: true }
+        { levelLogChannelId: channelId }
       );
 
-      console.log(updatedLogChannel);
-
-      await interaction.editReply(
-        `✅ Channel set as log channel for levels. To remove it use '/disable-level'`
-      );
+      await interaction.editReply({
+        content: `✅ Channel set as log channel for levels. To remove it use '/disable-level'`,
+        ephemeral: true,
+      });
       return;
     } catch (error) {
       console.log(error);
