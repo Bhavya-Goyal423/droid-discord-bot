@@ -1,5 +1,6 @@
 module.exports = async (client, message) => {
   console.log(message.content);
+  if (!message.inGuild() || message.author.bot) return;
 
   try {
     // Fetch the member to get the latest information
