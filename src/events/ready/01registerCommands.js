@@ -34,7 +34,7 @@ module.exports = async (client) => {
               description,
               options,
             });
-            console.log("Edited command", name);
+            console.log("Edited command", name, "\n");
           }
         } else {
           if (localCommand.deleted) {

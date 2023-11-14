@@ -32,11 +32,12 @@ module.exports = {
       return;
     } catch (error) {
       console.log(error);
-      await interaction.editReply(
-        `❌ There was error in setting the log channel\nReason ${JSON.stringify(
+      await interaction.editReply({
+        content: `❌ There was error in setting the log channel\nReason ${JSON.stringify(
           error.message
-        )}`
-      );
+        )}`,
+        ephemeral: true,
+      });
       return;
     }
   },

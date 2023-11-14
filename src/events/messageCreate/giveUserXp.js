@@ -20,7 +20,8 @@ module.exports = async (client, message) => {
   if (
     !message.inGuild() ||
     message.author.bot ||
-    cooldown.has(message.author.id + message.guild.id)
+    cooldown.has(message.author.id + message.guild.id) ||
+    message.content.startsWith("!dr")
   )
     return;
 

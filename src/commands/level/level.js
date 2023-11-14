@@ -14,12 +14,15 @@ module.exports = {
       return;
     }
     await interaction.deferReply({
-      ephermeral: true,
+      ephemeral: true,
     });
 
     const guildId = interaction.guildId;
 
-    const isChannelAvailable = await GuildModel.findOne({ guildId });
+    const isChannelAvailable = await GuildModel.findOne({ guildId }).populate(
+      "levels",
+      "-_id "
+    );
     if (isChannelAvailable?.levelLogChannelId === null) {
       return await interaction.editReply({
         content:
@@ -30,9 +33,9 @@ module.exports = {
 
     const userId = interaction.options.get("target-user").value;
     const targetUser = await interaction.guild.members.fetch(userId);
-    const query = { userId, guildId };
+    const levelsArr = isChannelAvailable.levels;
 
-    const level = await Level.findOne(query);
+    const level = levelsArr.find((l) => l.userId === userId);
 
     if (!level) {
       await interaction.editReply(
@@ -41,9 +44,7 @@ module.exports = {
       return;
     }
 
-    let allLevels = await Level.find({ guildId: interaction.guild.id }).select(
-      "-_id userId level xp"
-    );
+    let allLevels = [...levelsArr];
 
     allLevels.sort((a, b) => {
       if (a.level === b.level) {
