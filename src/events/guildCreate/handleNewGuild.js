@@ -54,6 +54,7 @@ module.exports = async (client, guild) => {
         console.log(`Registered command ${name}`);
       }
     }
+    console.log("\nAll Commands Registered");
   } catch (error) {
     console.log(error);
   }
