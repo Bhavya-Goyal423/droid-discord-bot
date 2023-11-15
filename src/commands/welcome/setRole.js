@@ -22,6 +22,19 @@ module.exports = {
     try {
       const guildId = interaction.guildId;
       const roleId = interaction.options.get("role-id").value;
+      const curGuild = interaction.guild;
+
+      const roleToGive = curGuild.roles.cache.find(
+        (role) => role.id === roleId
+      );
+
+      const botRolePosition =
+        interaction.guild.members.me.roles.highest.position;
+
+      if (botRolePosition <= roleToGive.position)
+        return interaction.editReply(
+          "Role not set\nReason: Specified role has same/higher position than my role"
+        );
 
       const guild = await GuildModel.findOne({ guildId });
       const guildWelcome = Object.fromEntries(guild.welcome);
