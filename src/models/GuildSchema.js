@@ -20,5 +20,10 @@ const guildScehma = new Schema({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Level" }],
     default: [],
   },
+  welcome: {
+    type: Map,
+    of: String,
+    default: { roleId: null, channelId: null, message: null },
+  },
 });
 module.exports = model("Guild", guildScehma);
