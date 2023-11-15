@@ -25,6 +25,8 @@ module.exports = async (client, message) => {
   )
     return;
 
+  const guildName = client.guilds.cache.get(message.guildId).name;
+
   const isChannelAvailable = await GuildModel.findOne({
     guildId: message.guildId,
   });
@@ -66,12 +68,14 @@ module.exports = async (client, message) => {
       cooldown.add(message.author.id + message.guild.id);
       setTimeout(() => {
         cooldown.delete(message.author.id + message.guild.id);
-      }, 60000);
+      }, 10);
     } else {
       const newLevel = new Level({
         userId: message.author.id,
         guildId: message.guild.id,
         xp: xpToGive,
+        username: message.author.username,
+        guildName,
       });
       const result = await newLevel.save().catch((e) => {
         console.log(e);
