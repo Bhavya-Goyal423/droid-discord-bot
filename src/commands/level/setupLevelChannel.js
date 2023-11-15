@@ -16,7 +16,7 @@ module.exports = {
 
   callback: async (client, interaction) => {
     if (!interaction.inGuild()) return;
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
     const channelId = interaction.options.get("channel-id").value;
 
     try {
@@ -26,7 +26,7 @@ module.exports = {
       );
 
       await interaction.editReply({
-        content: `✅ Channel set as log channel for levels. To remove it use '/disable-level'`,
+        content: `✅ Channel set as log channel for levels. To remove it use '/disable-levels'`,
         ephemeral: true,
       });
       return;

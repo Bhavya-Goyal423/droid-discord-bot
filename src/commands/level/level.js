@@ -2,7 +2,6 @@ const {
   ApplicationCommandOptionType,
   AttachmentBuilder,
 } = require("discord.js");
-const Level = require("../../models/Level");
 const canvacord = require("canvacord");
 const calculateLevelXp = require("../../utils/calculateLevelXp");
 const GuildModel = require("../../models/GuildSchema");
